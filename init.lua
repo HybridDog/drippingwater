@@ -69,7 +69,7 @@ minetest.register_entity("drippingwater:drop_lava", {
 		if minetest.get_node(ownpos).name ~= "air" then
 			self.object:remove()
 			ownpos.y = ownpos.y + 0.5
-			minetest.sound_play({name="drippingwater_lavadrip"}, {pos = ownpos, gain = 0.5, max_hear_distance = 8})
+			minetest.sound_play({name="default_cool_lava"}, {pos = ownpos, gain = 0.025, max_hear_distance = 8})
 		end
 	end,
 })
