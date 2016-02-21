@@ -8,15 +8,16 @@
 
 --water
 
-minetest.register_entity("drippingwater:drop_water", {
+local def = {
 	hp_max = 2000,
 	physical = true,
 	collisionbox = {0,0,0,0,0,0},
 	visual = "cube",
 	visual_size = {x=0.05, y=0.1},
-	textures = {"default_water.png","default_water.png","default_water.png","default_water.png", "default_water.png", 	"default_water.png"},
 	spritediv = {x=1, y=1},
 	initial_sprite_basepos = {x=0, y=0},
+
+	textures = {"default_water.png","default_water.png","default_water.png","default_water.png", "default_water.png", "default_water.png"},
 
 	on_activate = function(self, staticdata)
 		self.object:setsprite({x=0,y=0}, 1, 1, true)
@@ -37,42 +38,36 @@ minetest.register_entity("drippingwater:drop_water", {
 			minetest.sound_play({name="drippingwater_drip"}, {pos = ownpos, gain = 0.5, max_hear_distance = 8})
 		end
 	end,
-})
+}
+
+minetest.register_entity("drippingwater:drop_water", table.copy(def))
 
 
 
 --lava
 
-minetest.register_entity("drippingwater:drop_lava", {
-	hp_max = 2000,
-	physical = true,
-	collisionbox = {0,0,0,0,0,0},
-	visual = "cube",
-	visual_size = {x=0.05, y=0.1},
-	textures = {"default_lava.png","default_lava.png","default_lava.png","default_lava.png", "default_lava.png", "default_lava.png"},
-	spritediv = {x=1, y=1},
-	initial_sprite_basepos = {x=0, y=0},
+def.textures = {"default_lava.png","default_lava.png","default_lava.png","default_lava.png", "default_lava.png", "default_lava.png"}
+def.on_activate = function(self, staticdata)
+	self.object:setsprite({x=0,y=0}, 1, 0, true)
+	self.object:setacceleration({x=0, y=-5, z=0})
+end
+def.on_step = function(self, dtime)
+	if self.object:getvelocity().y ~= 0 then
+		return
+	end
 
-	on_activate = function(self, staticdata)
-		self.object:setsprite({x=0,y=0}, 1, 0, true)
-		self.object:setacceleration({x=0, y=-5, z=0})
-	end,
+	local ownpos = self.object:getpos()
+	ownpos.y = ownpos.y - 0.5
 
-	on_step = function(self, dtime)
-		if self.object:getvelocity().y ~= 0 then
-			return
-		end
+	if minetest.get_node(ownpos).name ~= "air" then
+		self.object:remove()
+		ownpos.y = ownpos.y + 0.5
+		minetest.sound_play({name="default_cool_lava"}, {pos = ownpos, gain = 0.025, max_hear_distance = 8})
+	end
+end
 
-		local ownpos = self.object:getpos()
-		ownpos.y = ownpos.y - 0.5
+minetest.register_entity("drippingwater:drop_lava", def)
 
-		if minetest.get_node(ownpos).name ~= "air" then
-			self.object:remove()
-			ownpos.y = ownpos.y + 0.5
-			minetest.sound_play({name="default_cool_lava"}, {pos = ownpos, gain = 0.025, max_hear_distance = 8})
-		end
-	end,
-})
 
 
 local function spawn_drop(pos, name)
@@ -91,6 +86,7 @@ minetest.register_abm({
 	neighbors = {"group:water"},
 	interval = 2,
 	chance = 22,
+	catch_up = false,
 	action = function(pos)
 		spawn_drop(pos, "drippingwater:drop_water")
 	end,
@@ -105,6 +101,7 @@ minetest.register_abm({
 	neighbors = {"group:lava"},
 	interval = 2,
 	chance = 22,
+	catch_up = false,
 	action = function(pos)
 		spawn_drop(pos, "drippingwater:drop_lava")
 	end,

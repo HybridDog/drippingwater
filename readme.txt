@@ -12,7 +12,6 @@ Installing instructions:
 Manual:
 
 -> drops are generated rarely under crumbly nodes (dirt,grass,sandstone)
--> waterdrops are generated under cloudstone massively
 -> they will stay some time at the generated block and than they fall down
 -> when they collide with the ground, a sound is played and they are destroyed
 
