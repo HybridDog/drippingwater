@@ -8,6 +8,10 @@
 
 --water
 
+local function can_fall_through(name)
+	return minetest.registered_nodes[name] and minetest.registered_nodes[name].walkable == false
+end
+
 local def = {
 	hp_max = 2000,
 	physical = true,
@@ -32,7 +36,7 @@ local def = {
 		local ownpos = self.object:getpos()
 		ownpos.y = ownpos.y - 0.5
 
-		if minetest.get_node(ownpos).name ~= "air" then
+		if not can_fall_through(minetest.get_node(ownpos).name) then
 			self.object:remove()
 			ownpos.y = ownpos.y + 0.5
 			minetest.sound_play({name="drippingwater_drip"}, {pos = ownpos, gain = 0.5, max_hear_distance = 8})
@@ -59,7 +63,7 @@ def.on_step = function(self, dtime)
 	local ownpos = self.object:getpos()
 	ownpos.y = ownpos.y - 0.5
 
-	if minetest.get_node(ownpos).name ~= "air" then
+	if not can_fall_through(minetest.get_node(ownpos).name) then
 		self.object:remove()
 		ownpos.y = ownpos.y + 0.5
 		minetest.sound_play({name="default_cool_lava"}, {pos = ownpos, gain = 0.025, max_hear_distance = 8})
@@ -71,8 +75,8 @@ minetest.register_entity("drippingwater:drop_lava", def)
 
 
 local function spawn_drop(pos, name)
-	if minetest.get_node({x=pos.x, y=pos.y -1, z=pos.z}).name == "air"
-	and minetest.get_node({x=pos.x, y=pos.y -2, z=pos.z}).name == "air" then
+	if can_fall_through(minetest.get_node({x=pos.x, y=pos.y -1, z=pos.z}).name)
+	and can_fall_through(minetest.get_node({x=pos.x, y=pos.y -2, z=pos.z}).name) then
 		minetest.add_entity({x=pos.x+(math.random()-0.5)*0.9, y=pos.y-0.5, z=pos.z+(math.random()-0.5)*0.9}, name)
 	end
 end
