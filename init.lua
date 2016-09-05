@@ -9,7 +9,10 @@
 --water
 
 local function can_fall_through(name)
-	return minetest.registered_nodes[name] and minetest.registered_nodes[name].walkable == false
+	local def = minetest.registered_nodes[name]
+	return def
+		and def.walkable == false
+		and def.liquidtype == "none"
 end
 
 local def = {
@@ -75,6 +78,11 @@ minetest.register_entity("drippingwater:drop_lava", def)
 
 
 local function spawn_drop(pos, name)
+	local def = minetest.registered_nodes[minetest.get_node{x=pos.x, y=pos.y +1, z=pos.z}.name]
+	if not def
+	or def.liquidtype == "none" then
+		return
+	end
 	if can_fall_through(minetest.get_node({x=pos.x, y=pos.y -1, z=pos.z}).name)
 	and can_fall_through(minetest.get_node({x=pos.x, y=pos.y -2, z=pos.z}).name) then
 		minetest.add_entity({x=pos.x+(math.random()-0.5)*0.9, y=pos.y-0.5, z=pos.z+(math.random()-0.5)*0.9}, name)
