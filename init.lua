@@ -3,6 +3,8 @@
 
 -- License of code, textures & sounds: CC0
 
+-- forum mod topic at https://forum.minetest.net/viewtopic.php?f=11&t=1688
+
 
 --Drop entities
 
