@@ -28,12 +28,12 @@ local def = {
 
 	textures = {"default_water.png","default_water.png","default_water.png","default_water.png", "default_water.png", "default_water.png"},
 
-	on_activate = function(self, staticdata)
+	on_activate = function(self)
 		self.object:setsprite({x=0,y=0}, 1, 1, true)
 		self.object:setacceleration({x=0, y=-5, z=0})
 	end,
 
-	on_step = function(self, dtime)
+	on_step = function(self)
 		if self.object:getvelocity().y ~= 0 then
 			return
 		end
@@ -56,11 +56,11 @@ minetest.register_entity("drippingwater:drop_water", table.copy(def))
 --lava
 
 def.textures = {"default_lava.png","default_lava.png","default_lava.png","default_lava.png", "default_lava.png", "default_lava.png"}
-def.on_activate = function(self, staticdata)
+def.on_activate = function(self)
 	self.object:setsprite({x=0,y=0}, 1, 0, true)
 	self.object:setacceleration({x=0, y=-5, z=0})
 end
-def.on_step = function(self, dtime)
+def.on_step = function(self)
 	if self.object:getvelocity().y ~= 0 then
 		return
 	end
