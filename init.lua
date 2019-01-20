@@ -18,15 +18,19 @@ local function can_fall_through(name)
 end
 
 local def = {
-	hp_max = 2000,
-	physical = true,
-	collisionbox = {0,0,0,0,0,0},
-	visual = "cube",
-	visual_size = {x=0.05, y=0.1},
-	spritediv = {x=1, y=1},
-	initial_sprite_basepos = {x=0, y=0},
+	initial_properties = {
+		hp_max = 2000,
+		physical = true,
+		collisionbox = {0,0,0,0,0,0},
+		visual = "cube",
+		visual_size = {x=0.05, y=0.1},
+		spritediv = {x=1, y=1},
+		initial_sprite_basepos = {x=0, y=0},
 
-	textures = {"default_water.png","default_water.png","default_water.png","default_water.png", "default_water.png", "default_water.png"},
+		textures = {"default_water.png", "default_water.png",
+			"default_water.png", "default_water.png", "default_water.png",
+			"default_water.png"},
+	},
 
 	on_activate = function(self)
 		self.object:setsprite({x=0,y=0}, 1, 1, true)
@@ -49,13 +53,17 @@ local def = {
 	end,
 }
 
+local water_drop_def = table.copy(def)
+water_drop_def.initial_properties = table.copy(def.initial_properties)
 minetest.register_entity("drippingwater:drop_water", table.copy(def))
 
 
 
 --lava
 
-def.textures = {"default_lava.png","default_lava.png","default_lava.png","default_lava.png", "default_lava.png", "default_lava.png"}
+def.initial_properties.textures = {"default_lava.png", "default_lava.png",
+	"default_lava.png", "default_lava.png", "default_lava.png",
+	"default_lava.png"}
 def.on_activate = function(self)
 	self.object:setsprite({x=0,y=0}, 1, 0, true)
 	self.object:setacceleration({x=0, y=-5, z=0})
@@ -80,14 +88,17 @@ minetest.register_entity("drippingwater:drop_lava", def)
 
 
 local function spawn_drop(pos, name)
-	local def = minetest.registered_nodes[minetest.get_node{x=pos.x, y=pos.y +1, z=pos.z}.name]
+	local def = minetest.registered_nodes[
+		minetest.get_node{x=pos.x, y=pos.y +1, z=pos.z}.name]
 	if not def
 	or def.liquidtype == "none" then
 		return
 	end
-	if can_fall_through(minetest.get_node({x=pos.x, y=pos.y -1, z=pos.z}).name)
-	and can_fall_through(minetest.get_node({x=pos.x, y=pos.y -2, z=pos.z}).name) then
-		minetest.add_entity({x=pos.x+(math.random()-0.5)*0.9, y=pos.y-0.5, z=pos.z+(math.random()-0.5)*0.9}, name)
+	if can_fall_through(minetest.get_node{x=pos.x, y=pos.y-1, z=pos.z}.name)
+	and can_fall_through(
+			minetest.get_node{x=pos.x, y=pos.y - 2, z=pos.z}.name) then
+		minetest.add_entity({x=pos.x+(math.random()-0.5)*0.9, y=pos.y-0.5,
+			z=pos.z+(math.random()-0.5)*0.9}, name)
 	end
 end
 
