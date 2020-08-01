@@ -34,15 +34,15 @@ local def = {
 
 	on_activate = function(self)
 		self.object:setsprite({x=0,y=0}, 1, 1, true)
-		self.object:setacceleration({x=0, y=-5, z=0})
+		self.object:set_acceleration({x=0, y=-5, z=0})
 	end,
 
 	on_step = function(self)
-		if self.object:getvelocity().y ~= 0 then
+		if self.object:get_velocity().y ~= 0 then
 			return
 		end
 
-		local ownpos = self.object:getpos()
+		local ownpos = self.object:get_pos()
 		ownpos.y = ownpos.y - 0.5
 
 		if not can_fall_through(minetest.get_node(ownpos).name) then
@@ -66,14 +66,14 @@ def.initial_properties.textures = {"default_lava.png", "default_lava.png",
 	"default_lava.png"}
 def.on_activate = function(self)
 	self.object:setsprite({x=0,y=0}, 1, 0, true)
-	self.object:setacceleration({x=0, y=-5, z=0})
+	self.object:set_acceleration({x=0, y=-5, z=0})
 end
 def.on_step = function(self)
-	if self.object:getvelocity().y ~= 0 then
+	if self.object:get_velocity().y ~= 0 then
 		return
 	end
 
-	local ownpos = self.object:getpos()
+	local ownpos = self.object:get_pos()
 	ownpos.y = ownpos.y - 0.5
 
 	if not can_fall_through(minetest.get_node(ownpos).name) then
