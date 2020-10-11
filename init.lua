@@ -17,7 +17,7 @@ local function can_fall_through(name)
 		and def.liquidtype == "none"
 end
 
-local def = {
+local droplet_def = {
 	initial_properties = {
 		hp_max = 2000,
 		physical = true,
@@ -53,22 +53,22 @@ local def = {
 	end,
 }
 
-local water_drop_def = table.copy(def)
-water_drop_def.initial_properties = table.copy(def.initial_properties)
-minetest.register_entity("drippingwater:drop_water", table.copy(def))
+local water_drop_def = table.copy(droplet_def)
+water_drop_def.initial_properties = table.copy(droplet_def.initial_properties)
+minetest.register_entity("drippingwater:drop_water", table.copy(droplet_def))
 
 
 
 --lava
 
-def.initial_properties.textures = {"default_lava.png", "default_lava.png",
+droplet_def.initial_properties.textures = {"default_lava.png",
 	"default_lava.png", "default_lava.png", "default_lava.png",
-	"default_lava.png"}
-def.on_activate = function(self)
+	"default_lava.png", "default_lava.png"}
+droplet_def.on_activate = function(self)
 	self.object:setsprite({x=0,y=0}, 1, 0, true)
 	self.object:set_acceleration({x=0, y=-5, z=0})
 end
-def.on_step = function(self)
+droplet_def.on_step = function(self)
 	if self.object:get_velocity().y ~= 0 then
 		return
 	end
@@ -83,7 +83,7 @@ def.on_step = function(self)
 	end
 end
 
-minetest.register_entity("drippingwater:drop_lava", def)
+minetest.register_entity("drippingwater:drop_lava", droplet_def)
 
 
 
