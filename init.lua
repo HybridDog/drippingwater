@@ -33,7 +33,7 @@ local droplet_def = {
 	},
 
 	on_activate = function(self)
-		self.object:setsprite({x=0,y=0}, 1, 1, true)
+		self.object:set_sprite({x=0,y=0}, 1, 1, true)
 		self.object:set_acceleration({x=0, y=-5, z=0})
 	end,
 
@@ -65,7 +65,7 @@ droplet_def.initial_properties.textures = {"default_lava.png",
 	"default_lava.png", "default_lava.png", "default_lava.png",
 	"default_lava.png", "default_lava.png"}
 droplet_def.on_activate = function(self)
-	self.object:setsprite({x=0,y=0}, 1, 0, true)
+	self.object:set_sprite({x=0,y=0}, 1, 0, true)
 	self.object:set_acceleration({x=0, y=-5, z=0})
 end
 droplet_def.on_step = function(self)
